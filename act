@@ -1,0 +1,25 @@
+#AutoCucumberTool
+#automatically generates step definitions from feature files
+#*requires gnu-sed (brew install gnu-sed)
+
+if [ "$#" -ne 3 ]
+then
+  echo "Usage: act <file name> <starting line> <ending line>"
+  exit 1
+fi
+
+FILENAME=${1}
+DELETEUNTIL=$((${2}-1))
+DELETEAFTER=$((${3}+1))
+KEEPRANGE="${2},${DELETEAFTER}"
+TEMP="autocucumbertool.txt"
+
+echo "" >> ./step_definitions/modifyCashDeal.js
+echo "" >> ./step_definitions/modifyCashDeal.js
+gsed -re "$((${2})),$((${3}))s/^  (When|Then|Given|And) (.*)$/\1\(\/\^\2\$\/\, \(\) => {}\)\;/gm" ./features/${1}.feature > ${TEMP}
+gsed -i -e "s/^@.*$//g" ${TEMP}
+gsed -i -e "s/^Scenario:.*$//g" ${TEMP}
+gsed -n -i -e "${KEEPRANGE}p" ${TEMP}
+gsed -i "s/{}/{\n}/g" ${TEMP}
+cat ${TEMP} >> ./step_definitions/${1}.js
+rm ${TEMP}
