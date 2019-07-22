@@ -1,3 +1,4 @@
+#!/bin/bash
 #AutoCucumberTool
 #automatically generates step definitions from feature files
 #*requires gnu-sed (brew install gnu-sed)
